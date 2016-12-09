@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,7 +6,7 @@ using System.Windows.Shapes;
 
 namespace CESI.MF.projet.classe
 {
-    class Bird
+    class Enemies
     {
         public Vector velocity; // vitesse
         public Vector acceleration; // acceleration
@@ -19,9 +15,9 @@ namespace CESI.MF.projet.classe
         public Ellipse e;
         public Canvas canvas;
 
-        public Bird(double m, double x, double y, Canvas canvas)
+        public Enemies(double m, double x, double y, Canvas canvas)
         {
-            //initialisation des variables
+
             this.location.X = x;
             this.location.Y = y;
             this.mass = m;
@@ -29,65 +25,57 @@ namespace CESI.MF.projet.classe
             this.velocity.Y = 0;
             this.acceleration.X = 0;
             this.acceleration.Y = 0;
-            //Création de bird
+            this.canvas = canvas;
             this.e = new Ellipse();
-            Color color = Color.FromArgb(255, 55, 200, 220); // définit la couleur RVB
+            Color color = Color.FromArgb(255, 225, 80, 100); // définit la couleur RVB
             SolidColorBrush b = new SolidColorBrush();
             b.Color = color;
             e.Fill = b; // couleur de remplissage
             e.StrokeThickness = 2; // taille du contour
             e.Stroke = Brushes.Black; // couleur du contour
-            e.Width = mass+20 ;
-            e.Height = mass+20;
-            display(); // centrer bird 
+            e.Width = mass + 15;
+            e.Height = mass + 15;
             canvas.Children.Add(e);
         }
-       
-        // Afficher bird
+
+        public Vector getEllipsePosition()
+        {
+            location.X = location.X - (e.Width / 2);
+            location.Y = location.Y - (e.Height / 2);
+            return location;
+        }
+
         public void display()
         {
             Canvas.SetTop(e, location.Y);
             Canvas.SetLeft(e, location.X);
-        }
 
-        // Vérifie si bird touche le sol
-        public bool checkEdges(double hauteur)
+        }
+        public void checkEdges(double hauteur, double largeur)
         {
-            bool touch = false;
-            if (location.Y  > hauteur ) { 
-                touch = true;
+            if (location.Y > hauteur)
+            {
+                velocity.Y *= -0.9; // A little dampening when hitting the bottom
                 location.Y = hauteur;
-                
+            }else if(location.Y < 1){
+                velocity.Y *= -0.9; // A little dampening when hitting the bottom
+                location.Y = hauteur;
+            }else if(location.X<0) {
+                location.X = largeur;
             }
-            return touch;
-        }
 
-        // Vérifie si bird touche un obstacle
-        public bool checkObstacle(List<Obstacle> obs) {
-            bool touched = false;
-            for (int i = 0; i < obs.Count; i++) {
-                if(location.X>obs[i].location.X && location.X<obs[i].location.X+obs[i].w && location.Y>obs[i].location.Y && location.Y< obs[i].location.Y+obs[i].h)
-                {
-                    touched= true;
-                    break;
-                }
-                else
-                {
-                    touched= false;
-                }
-            }
-            return touched;
         }
-        //Appliquer force
         public void applyForce(Vector force)
         {
             Vector vec = force / mass;
             acceleration += vec;
         }
-        // Mise à jour des vecteurs
+
         public void update()
         {
             velocity += acceleration;
+            velocity.Y = 2;
+            velocity.X = -1;
             location += velocity;
             acceleration.X = 0;
             acceleration.Y = 0;
