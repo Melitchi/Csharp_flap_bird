@@ -1,4 +1,5 @@
 ﻿
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
@@ -11,6 +12,7 @@ namespace CESI.MF.projet.classe
         public Vector acceleration; // acceleration
         public double mass; // masse
         public Vector location; // position du centre
+        public string repertoireImg = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar + "/../ img /");
         public Ellipse e;
 
         abstract public bool checkEdges(double hauteur, double largeur);

@@ -3,6 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace CESI.MF.projet.classe
@@ -24,12 +25,16 @@ namespace CESI.MF.projet.classe
              this.e = new Ellipse();
             Color color = Color.FromArgb(255, 225, 80, 100); // définit la couleur RVB
             SolidColorBrush b = new SolidColorBrush();
-            b.Color = color;
+            /*b.Color = color;
             e.Fill = b; // couleur de remplissage
             e.StrokeThickness = 2; // taille du contour
-            e.Stroke = Brushes.Black; // couleur du contour
-            e.Width = mass + 15;
-            e.Height = mass + 15;
+            e.Stroke = Brushes.Black; // couleur du contour*/
+            ImageBrush myBrush = new ImageBrush();
+            myBrush.ImageSource = new BitmapImage(new Uri(repertoireImg + "/../img/redbee.png", UriKind.Absolute));
+
+            e.Fill = myBrush;
+            e.Width = 60;
+            e.Height = 46;
             canvas.Children.Add(e);
         }
 

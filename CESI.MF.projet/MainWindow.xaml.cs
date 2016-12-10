@@ -45,7 +45,6 @@ namespace CESI.MF.projet
             loose = false;
             repertoireImg = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar + "img");
             backgroundImage = new BitmapImage(new Uri(repertoireImg+"/../img/game_background.png", UriKind.Absolute));
-            //même taille que la fenêtre
             // ajout du background
             img = new Image();
             img.Source = backgroundImage;
@@ -96,27 +95,50 @@ namespace CESI.MF.projet
         private void KeyAction(object sender, KeyEventArgs e)
         {
             // quitter le jeu
-            if (e.Key == Key.Escape) {
+            if (e.Key == Key.Escape)
+            {
                 this.Close();
-             }
+            }
             // sauter
-            if (e.Key == Key.Space) {
-                bird.velocity.Y = -2;  
-             }
-             //Démarrer ou mettre le jeu en pause
-             if(e.Key == Key.Enter) {
-                 if(!started){ 
+            if (e.Key == Key.Space)
+            {
+                bird.velocity.Y = -2;
+            }
+            //Démarrer ou mettre le jeu en pause
+            if (e.Key == Key.Enter)
+            {
+                if (!started)
+                {
                     startGame();
                     started = true;
-                }else {
+                    if (loose)
+                    {
+                        if (lives > 0) { resetGame(false); }
+                        else { lives = 5; resetGame(true); }
+                    }
+                }
+                else
+                {
                     stopGame();
                     started = false;
                 }
             }
         }
+        public void resetGame(bool newGame){
+            if(obstacles.Count>0) { 
+                obstacles.Clear();
+                for (int i = 0; i < 8; i++)
+                {
+                    Rectangle rectangle = (Rectangle)LogicalTreeHelper.FindLogicalNode(mainCanvas, "rectangle" + i);
+                    mainCanvas.Children.Remove(rectangle);
+                }
+             }
+            bird.location.X = mainCanvas.Width / 2;
+            bird.location.Y = mainCanvas.Height / 2;
+            generate();
+        }
         public void generate(){
             bird.display();
-            obstacles = new List<Obstacle>();
             lifeLabel.Content = "Vies: " + lives;
             Canvas.SetTop(lifeLabel, 10);
             Canvas.SetLeft(lifeLabel, 10);
@@ -139,7 +161,7 @@ namespace CESI.MF.projet
                 {
                     distance += 120;
                 }
-                obstacles.Add(new Obstacle(distance, altitude, largeur, hauteur, mainCanvas));
+                obstacles.Add(new Obstacle(distance, altitude, largeur, hauteur, mainCanvas, "rectangle"+i));
             }
         }
 
@@ -194,25 +216,10 @@ namespace CESI.MF.projet
         public void showGameOverScreen() {
             if(lives>0) {
                 statutLabel.Content = "RETRY";
-                resetGame(false);
+               
             }else { 
                 statutLabel.Content = "GAME OVER";
-                resetGame(true);
             }
-        }
-        public void resetGame(bool newGame) {
-            if(newGame) {
-                lives = 5;
-            }
-            obstacles.Clear();
-            foreach (Obstacle obs in obstacles)
-            {
-                obstacles.Remove(obs);
-               // mainCanvas.Children.Remove(ui);
-            }
-            bird.location.X = mainCanvas.Width/2;
-            bird.location.Y = mainCanvas.Height/2;
-            generate();
         }
     }
 }

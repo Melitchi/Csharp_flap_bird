@@ -14,7 +14,7 @@ namespace CESI.MF.projet.classe
         public Vector velocity;
         private const double scrolling_velocity = -2;
 
-        public Obstacle(double x_, double y_, double w_, double h_, Canvas canvas) {
+        public Obstacle(double x_, double y_, double w_, double h_, Canvas canvas, string name) {
             //Définition de l'obstacle
             rectangle = new Rectangle();
             x = x_;
@@ -30,6 +30,7 @@ namespace CESI.MF.projet.classe
             acceleration.X = 0;
             acceleration.Y = 0;
             //Création de l'obstacle
+            rectangle.Name = name;
             rectangle.Width = w;
             rectangle.Height = h;
             rectangle.Stroke = Brushes.Black;

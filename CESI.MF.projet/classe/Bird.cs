@@ -33,7 +33,6 @@ namespace CESI.MF.projet.classe
             e.Fill = b; // couleur de remplissage
             e.StrokeThickness = 2; // taille du contour
             e.Stroke = Brushes.Black; // couleur du contour*/
-            string repertoireImg = repertoireImg = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar + "img");
 
             ImageBrush myBrush = new ImageBrush();
             myBrush.ImageSource = new BitmapImage(new Uri(repertoireImg + "/../img/whiteBird.png", UriKind.Absolute));
@@ -50,8 +49,7 @@ namespace CESI.MF.projet.classe
             bool touch = false;
             if (location.Y  > hauteur ) { 
                 touch = true;
-                location.Y = hauteur;
-                
+                location.Y = hauteur;  
             }
             return touch;
         }
@@ -74,8 +72,7 @@ namespace CESI.MF.projet.classe
         }
      
         // Mise à jour des vecteurs
-        public override void update()
-        {
+        public override void update(){
             velocity += acceleration;
             location += velocity;
             acceleration.X = 0;
