@@ -11,9 +11,6 @@ using System.Windows.Shapes;
 
 namespace CESI.MF.projet
 {
-    /// <summary>
-    /// Logique d'interaction pour MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
        
@@ -45,7 +42,7 @@ namespace CESI.MF.projet
             lifeLabel = new Label();
             statutLabel.FontSize = 30;
             lives = 5;
-                loose = false;
+            loose = false;
             repertoireImg = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar + "img");
             backgroundImage = new BitmapImage(new Uri(repertoireImg+"/../img/game_background.png", UriKind.Absolute));
             //même taille que la fenêtre
@@ -75,11 +72,10 @@ namespace CESI.MF.projet
             statutLabel.Content = "Touche entrée pour commencer";
             mainCanvas.Children.Add(statutLabel);
             mainCanvas.Children.Add(lifeLabel);
-
-            generate();
             // Création du personnage
             bird = new Bird(10, mainCanvas.Width/2, mainCanvas.Height/2, mainCanvas);
             en = new Enemies(10, mainCanvas.Width, 1, mainCanvas);
+            generate();
 
 
         }
@@ -119,8 +115,8 @@ namespace CESI.MF.projet
             }
         }
         public void generate(){
+            bird.display();
             obstacles = new List<Obstacle>();
-
             lifeLabel.Content = "Vies: " + lives;
             Canvas.SetTop(lifeLabel, 10);
             Canvas.SetLeft(lifeLabel, 10);
@@ -175,7 +171,7 @@ namespace CESI.MF.projet
             bird.update();
             bird.display();
             // Contrôle si bird à perdu
-            if(!true == bird.checkEdges(mainCanvas.Height)&& !true == bird.checkObstacle(obstacles)) {
+            if(!true == bird.checkEdges(mainCanvas.Height, mainCanvas.Width)&& !true == bird.checkObstacle(obstacles)) {
                 bird.applyForce(bGravite);
             }else {
                 loose = true;
@@ -192,7 +188,7 @@ namespace CESI.MF.projet
 
         private void showGamePauseScreen()
         {
-            statutLabel.Content = "Pause";
+            statutLabel.Content = "PAUSE";
         }
 
         public void showGameOverScreen() {
@@ -208,11 +204,15 @@ namespace CESI.MF.projet
             if(newGame) {
                 lives = 5;
             }
+            obstacles.Clear();
+            foreach (Obstacle obs in obstacles)
+            {
+                obstacles.Remove(obs);
+               // mainCanvas.Children.Remove(ui);
+            }
             bird.location.X = mainCanvas.Width/2;
             bird.location.Y = mainCanvas.Height/2;
-            obstacles.Clear();
             generate();
-            bird.display();
         }
     }
 }
