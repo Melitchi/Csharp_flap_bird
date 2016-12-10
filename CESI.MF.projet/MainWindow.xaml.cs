@@ -179,6 +179,7 @@ namespace CESI.MF.projet
                 bird.applyForce(bGravite);
             }else {
                 loose = true;
+                started = false;
                 statutLabel.Content = "loose";
                 lives--;
                 stopGame();
@@ -197,13 +198,16 @@ namespace CESI.MF.projet
         public void showGameOverScreen() {
             if(lives>0) {
                 statutLabel.Content = "RETRY";
-                resetGame();
+                resetGame(false);
             }else { 
                 statutLabel.Content = "GAME OVER";
+                resetGame(true);
             }
         }
-        public void resetGame() {
-
+        public void resetGame(bool newGame) {
+            if(newGame) {
+                lives = 5;
+            }
             bird.location.X = mainCanvas.Width/2;
             bird.location.Y = mainCanvas.Height/2;
             obstacles.Clear();

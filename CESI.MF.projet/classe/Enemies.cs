@@ -56,10 +56,10 @@ namespace CESI.MF.projet.classe
             if (location.Y > hauteur)
             {
                 velocity.Y *= -0.9; // A little dampening when hitting the bottom
-                location.Y = hauteur;
-            }else if(location.Y < 1){
+                location.Y = 0;
+           /* }else if(location.Y < 1){
                 velocity.Y *= -0.9; // A little dampening when hitting the bottom
-                location.Y = hauteur;
+                location.Y = hauteur;*/
             }else if(location.X<0) {
                 location.X = largeur;
             }
