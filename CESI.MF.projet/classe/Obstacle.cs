@@ -1,6 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace CESI.MF.projet.classe
@@ -13,6 +16,7 @@ namespace CESI.MF.projet.classe
         public Vector acceleration;
         public Vector velocity;
         private const double scrolling_velocity = -2;
+        private string repertoireImg = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar + "/../ img /");
 
         public Obstacle(double x_, double y_, double w_, double h_, Canvas canvas, string name) {
             //Définition de l'obstacle
@@ -33,8 +37,13 @@ namespace CESI.MF.projet.classe
             rectangle.Name = name;
             rectangle.Width = w;
             rectangle.Height = h;
-            rectangle.Stroke = Brushes.Black;
-            rectangle.Fill = Brushes.GreenYellow;
+            //rectangle.Stroke = Brushes.Black;
+            //rectangle.Fill = Brushes.GreenYellow;
+
+            ImageBrush myBrush = new ImageBrush();
+            myBrush.ImageSource = new BitmapImage(new Uri(repertoireImg + "/../img/pipe.png", UriKind.Absolute));
+
+            rectangle.Fill = myBrush;
             Canvas.SetTop(rectangle, x);
             Canvas.SetLeft(rectangle, y);
             canvas.Children.Add(rectangle);

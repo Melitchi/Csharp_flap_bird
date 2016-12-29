@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Media;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,8 +28,10 @@ namespace CESI.MF.projet
         private List <Obstacle> obstacles;
         public BitmapImage backgroundImage;
         public Image img;
-        private string repertoireImg;
+        private string rootRepertoiry;
+        public SoundPlayer player;
         public MainWindow()
+       
         {
             InitializeComponent();
             started = false;
@@ -43,8 +46,8 @@ namespace CESI.MF.projet
             statutLabel.FontSize = 30;
             lives = 5;
             loose = false;
-            repertoireImg = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar + "img");
-            backgroundImage = new BitmapImage(new Uri(repertoireImg+"/../img/game_background.png", UriKind.Absolute));
+            rootRepertoiry = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar);
+            backgroundImage = new BitmapImage(new Uri(rootRepertoiry + "/../img/game_background.png", UriKind.Absolute));
             // ajout du background
             img = new Image();
             img.Source = backgroundImage;
@@ -75,12 +78,19 @@ namespace CESI.MF.projet
             bird = new Bird(10, mainCanvas.Width/2, mainCanvas.Height/2, mainCanvas);
             en = new Enemies(10, mainCanvas.Width, 1, mainCanvas);
             generate();
+            //Préparation de la musique
+            player = new SoundPlayer();
+            player.SoundLocation = rootRepertoiry + "/../sound/Bonetrousle.wav";
+        }
 
-
+        private void PlayLoopingBackgroundSoundFile()
+        {
+            player.PlayLooping();
         }
 
         public void startGame() {
             statutLabel.Content = "";
+            PlayLoopingBackgroundSoundFile();
             CompositionTarget.Rendering += update;
         }
         public void stopGame() {
