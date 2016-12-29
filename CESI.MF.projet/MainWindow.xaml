@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CESI.MF.projet"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000" ResizeMode="NoResize">
+        Title="MainWindow" Height="600" Width="1000">
     <Grid x:Name="gameContainer">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="66*"/>

@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="classe\Bird.cs" />
     <Compile Include="classe\Characters.cs" />
+    <Compile Include="classe\Background.cs" />
     <Compile Include="classe\Enemies.cs" />
     <Compile Include="classe\Obstacle.cs" />
     <Compile Include="MainWindow.xaml.cs">

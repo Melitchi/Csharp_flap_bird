@@ -24,10 +24,9 @@ namespace CESI.MF.projet
         public Label lifeLabel;
         public Label statutLabel;
         public int lives;
+        private Background backgrd;
         private Enemies en;
         private List <Obstacle> obstacles;
-        public BitmapImage backgroundImage;
-        public Image img;
         private string rootRepertoiry;
         public SoundPlayer player;
         public MainWindow()
@@ -47,13 +46,10 @@ namespace CESI.MF.projet
             lives = 5;
             loose = false;
             rootRepertoiry = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(Directory.GetCurrentDirectory()) + System.IO.Path.DirectorySeparatorChar);
-            backgroundImage = new BitmapImage(new Uri(rootRepertoiry + "/../img/game_background.png", UriKind.Absolute));
-            // ajout du background
-            img = new Image();
-            img.Source = backgroundImage;
-            Canvas.SetTop(img, mainCanvas.Height);
-            Canvas.SetLeft(img, mainCanvas.Width);
-            mainCanvas.Children.Add(img);
+            backgrd = new Background(rootRepertoiry + "/../img/game_background.png");
+            Canvas.SetTop(backgrd.img, mainCanvas.Height);
+            Canvas.SetLeft(backgrd.img, mainCanvas.Width);
+            mainCanvas.Children.Add(backgrd.img);
             mainCanvas.Width = 994;
             mainCanvas.Height = 571;
 
@@ -125,6 +121,7 @@ namespace CESI.MF.projet
                     {
                         if (lives > 0) { resetGame(false); }
                         else { lives = 5; resetGame(true); }
+                        
                     }
                 }
                 else
@@ -147,8 +144,10 @@ namespace CESI.MF.projet
             bird.location.Y = mainCanvas.Height / 2;
             generate();
         }
+
         public void generate(){
             bird.display();
+            loose = false;
             lifeLabel.Content = "Vies: " + lives;
             Canvas.SetTop(lifeLabel, 10);
             Canvas.SetLeft(lifeLabel, 10);
@@ -202,8 +201,9 @@ namespace CESI.MF.projet
             bGravite.Y = 1;
             bird.update();
             bird.display();
+         
             // Contrôle si bird à perdu
-            if(!true == bird.checkEdges(mainCanvas.Height, mainCanvas.Width)&& !true == bird.checkObstacle(obstacles)) {
+            if (!true == bird.checkEdges(mainCanvas.Height, mainCanvas.Width)&& !true == bird.checkObstacle(obstacles)) {
                 bird.applyForce(bGravite);
             }else {
                 loose = true;

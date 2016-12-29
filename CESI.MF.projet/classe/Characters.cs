@@ -28,7 +28,5 @@ namespace CESI.MF.projet.classe
             Canvas.SetTop(e, location.Y);
             Canvas.SetLeft(e, location.X);
         }
-
-        // Vérifie si bird touche le sol
     }
 }
