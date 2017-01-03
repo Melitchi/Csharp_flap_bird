@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CESI.MF.projet.classe;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,6 +67,23 @@ namespace CESI.MF.projet.classe
                 else
                 {
                     touched= false;
+                }
+            }
+            return touched;
+        }
+        //vérifie si on heurte un ennemi
+        public bool checkEnnemies(List<Ennemies>list) {
+            bool touched = false;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (location.X + e.Width - 20 > list[i].location.X && location.X < list[i].location.X+list[i].width && location.Y + e.Height - 20 > list[i].location.Y && location.Y + e.Height - 20 < list[i].location.Y + list[i].height)
+                {
+                    touched = true;
+                    break;
+                }
+                else
+                {
+                    touched = false;
                 }
             }
             return touched;

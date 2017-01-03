@@ -25,8 +25,8 @@ namespace CESI.MF.projet
         public Label statutLabel;
         public int lives;
         private Background backgrd;
-        private Enemies en;
         private List <Obstacle> obstacles;
+        private List<Ennemies> ennemies;
         private string rootRepertoiry;
         public SoundPlayer player;
         public MainWindow()
@@ -39,6 +39,7 @@ namespace CESI.MF.projet
             //initialisation du canvas
             mainCanvas = new Canvas();
             obstacles = new List<Obstacle>();
+            ennemies = new List<Ennemies>();
             scoreLabel = new Label();
             statutLabel = new Label();
             lifeLabel = new Label();
@@ -59,7 +60,7 @@ namespace CESI.MF.projet
             // Ajouter le canvas
             mainCanvas.Focus();
             mainWindow.Content = mainCanvas;
-            mainWindow.Title = "Méli - Flap bird";
+            mainWindow.Title = "Méli - Flappy bird";
             //labels
             scoreLabel.Content = "";
             mainCanvas.Children.Add(scoreLabel);
@@ -72,7 +73,7 @@ namespace CESI.MF.projet
             mainCanvas.Children.Add(lifeLabel);
             // Création du personnage
             bird = new Bird(10, mainCanvas.Width/2, mainCanvas.Height/2, mainCanvas);
-            en = new Enemies(10, mainCanvas.Width, 1, mainCanvas);
+           
             generate();
             //Préparation de la musique
             player = new SoundPlayer();
@@ -81,7 +82,7 @@ namespace CESI.MF.projet
 
         private void PlayLoopingBackgroundSoundFile()
         {
-            player.PlayLooping();
+            //player.PlayLooping();
         }
 
         public void startGame() {
@@ -98,8 +99,7 @@ namespace CESI.MF.projet
             }
         }
 
-        private void KeyAction(object sender, KeyEventArgs e)
-        {
+        private void KeyAction(object sender, KeyEventArgs e){
             // quitter le jeu
             if (e.Key == Key.Escape)
             {
@@ -121,7 +121,6 @@ namespace CESI.MF.projet
                     {
                         if (lives > 0) { resetGame(false); }
                         else { lives = 5; resetGame(true); }
-                        
                     }
                 }
                 else
@@ -140,6 +139,15 @@ namespace CESI.MF.projet
                     mainCanvas.Children.Remove(rectangle);
                 }
              }
+            if (ennemies.Count > 0)
+            {
+                ennemies.Clear();
+                for (int i = 0; i < 8; i++)
+                {
+                    Ellipse todie = (Ellipse)LogicalTreeHelper.FindLogicalNode(mainCanvas, "ennemi" + i);
+                    mainCanvas.Children.Remove(todie);
+                }
+            }
             bird.location.X = mainCanvas.Width / 2;
             bird.location.Y = mainCanvas.Height / 2;
             generate();
@@ -152,8 +160,8 @@ namespace CESI.MF.projet
             Canvas.SetTop(lifeLabel, 10);
             Canvas.SetLeft(lifeLabel, 10);
             Canvas.SetZIndex(lifeLabel, 10);
-            // Génération des obstacles
 
+            // Génération des obstacles
             Random rand = new Random();
             double hauteur = (mainCanvas.Height / 2);
             double largeur = 100;
@@ -172,15 +180,19 @@ namespace CESI.MF.projet
                 }
                 obstacles.Add(new Obstacle(distance, altitude, largeur, hauteur, mainCanvas, "rectangle"+i));
             }
+            //Génération des ennemis
+            for (int i = 0; i < 2; i++)
+            {
+                ennemies.Add(new Ennemies(10, mainCanvas.Width, 1, mainCanvas,"ennemi"+i));
+           }
         }
 
-        public void update(Object sender, EventArgs e){            
-                // Mouvement des obstacles
-
+        public void update(Object sender, EventArgs e){
+            // Mouvement des obstacles
+            Vector oGravite = new Vector();
+            oGravite.Y = 5;
             for (int i = 0; i < obstacles.Count; i++)
-            {
-                Vector oGravite = new Vector();
-                oGravite.Y = 0.5;
+            { 
                 obstacles[i].update();
                 obstacles[i].display();
                 obstacles[i].applyForce(oGravite);
@@ -192,10 +204,13 @@ namespace CESI.MF.projet
             // Mouvements ennemies
             Vector eGravite = new Vector();
             eGravite.Y = 2;
-            en.update();
-            en.display();
-            en.applyForce(eGravite);
-            en.checkEdges(mainCanvas.Height, mainCanvas.Width);
+            for (int i = 0; i < ennemies.Count; i++)
+            {
+                ennemies[i].update();
+                ennemies[i].display();
+                ennemies[i].applyForce(eGravite);
+                ennemies[i].checkEdges(mainCanvas.Height, mainCanvas.Width);
+            }
             // Mouvements de bird 
             Vector bGravite = new Vector();
             bGravite.Y = 1;
@@ -203,7 +218,7 @@ namespace CESI.MF.projet
             bird.display();
          
             // Contrôle si bird à perdu
-            if (!true == bird.checkEdges(mainCanvas.Height, mainCanvas.Width)&& !true == bird.checkObstacle(obstacles)) {
+            if (!true == bird.checkEdges(mainCanvas.Height, mainCanvas.Width)&& !true == bird.checkObstacle(obstacles) && !true == bird.checkEnnemies(ennemies)) {
                 bird.applyForce(bGravite);
             }else {
                 loose = true;
